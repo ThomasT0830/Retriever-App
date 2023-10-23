@@ -20,14 +20,13 @@ struct TaskListView: View {
     @Bindable var settings: AppSettings
     
     @StateObject var locationManager = LocationManager()
-    
-    @State private var sortType: String = "Distance"
+
     
     var filteredTasks: [TaskItem] {
         let filtered = tasks.compactMap { task in
             return (!settings.isHideOnCompletionList || !isTaskCompleted(task)) ? task : nil
         }
-        return sort(on: sortType, filtered, locationManager)
+        return sort(on: settings.sortList, filtered, locationManager)
     }
     
     var body: some View {
@@ -77,7 +76,7 @@ struct TaskListView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 HStack(spacing: 35){
                     Menu {
-                        Picker("", selection: $sortType) {
+                        Picker("", selection: $settings.sortList) {
                             Label("Distance", systemImage: "location")
                                 .tag("Distance")
                             Label("Title", systemImage: "textformat.size.larger")
@@ -92,6 +91,7 @@ struct TaskListView: View {
                         .labelsHidden()
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
+                            .frame(width: 50, height: 50)
                     }
                     NavigationLink(destination: CreateTaskView(settings: settings)) {
                         Image(systemName: "plus")
@@ -120,6 +120,78 @@ struct TaskListView: View {
                 .padding(.top)
                 VStack(spacing: 0) {
                     ForEach(filteredTasks) { task in
+                        
+                        if settings.sortList == "Category" {
+                            if let index = filteredTasks.firstIndex(of: task) {
+                                if index == 0 {
+                                    if let category = task.category?.title {
+                                        Text(category)
+                                            .font(.headline.bold())
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding([.top, .horizontal])
+                                    }
+                                }
+                                else {
+                                    if let newCategory = task.category?.title, let oldCategory = filteredTasks[index - 1].category?.title {
+                                        if newCategory != oldCategory {
+                                            Text(newCategory)
+                                                .font(.headline.bold())
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding([.top, .horizontal])
+                                                .padding(.top)
+                                        }
+                                    }
+                                    else if task.category?.title == nil && filteredTasks[index - 1].category?.title != nil {
+                                        Text("No Category")
+                                            .font(.headline.bold())
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding([.top, .horizontal])
+                                            .padding(.top)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        else if settings.sortList == "Time" {
+                            if let index = filteredTasks.firstIndex(of: task) {
+                                if index == 0 {
+                                    Text(task.isDateEnabled ? "Dated Tasks" : (task.isRepeatEnabled ? "Routine Tasks" : "Undated Tasks"))
+                                        .font(.headline.bold())
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding([.top, .horizontal])
+                                }
+                                else {
+                                    if task.isDateEnabled != filteredTasks[index - 1].isDateEnabled || task.isRepeatEnabled !=  filteredTasks[index - 1].isRepeatEnabled {
+                                        Text(task.isDateEnabled ? "Dated Tasks" : (task.isRepeatEnabled ? "Routine Tasks" : "Undated Tasks"))
+                                            .font(.headline.bold())
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding([.top, .horizontal])
+                                            .padding(.top)
+                                    }
+                                }
+                            }
+                        }
+
+                        else if settings.sortList == "Priority" {
+                            if let index = filteredTasks.firstIndex(of: task) {
+                                if index == 0 {
+                                    Text(task.priority != "None" ? (task.priority + " Priority") : "No Priority")
+                                        .font(.headline.bold())
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding([.top, .horizontal])
+                                }
+                                else {
+                                    if task.priority != filteredTasks[index - 1].priority {
+                                        Text(task.priority != "None" ? (task.priority + " Priority") : "No Priority")
+                                            .font(.headline.bold())
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding([.top, .horizontal])
+                                            .padding(.top)
+                                    }
+                                }
+                            }
+                        }
+                        
                         TaskViewCell(task, settings)
                             .animation(.snappy(duration: 0.5), value: task.isExpanded)
                     }
@@ -177,13 +249,13 @@ struct TaskListView: View {
                     Circle()
                         .fill(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient)
                         .frame(width: 12, height: 12)
-                        .opacity(isTaskCompleted(task) ? 0.5 : 1)
+                        .opacity(isTaskCompleted(task) ? 0.3 : 1)
                 }
                 else {
                     Circle()
                         .stroke(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient, lineWidth: 3)
                         .frame(width: 12, height: 12)
-                        .opacity(isTaskCompleted(task) ? 0.5 : 1)
+                        .opacity(isTaskCompleted(task) ? 0.3 : 1)
                 }
             }
             Button {
@@ -199,7 +271,7 @@ struct TaskListView: View {
                 RoundedRectangle(cornerRadius: 50)
                     .fill(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient)
                     .frame(width: 4)
-                    .opacity(isTaskCompleted(task) ? 0.5 : 1)
+                    .opacity(isTaskCompleted(task) ? 0.3 : 1)
             }
         }
     }
@@ -301,7 +373,7 @@ struct TaskListView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.3 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -351,10 +423,10 @@ struct TaskListView: View {
                     } label: {
                         Image(systemName: "checkmark")
                             .foregroundStyle(isTaskCompleted(task) ? .black : .white)
-                            .font(.system(size: 10))
+                            .font(.system(size: 12))
                             .fontWeight(.bold)
                     }
-                    .padding(8)
+                    .padding(10)
                     .background(.white, in: RoundedRectangle(cornerRadius: 15))
                 }
             }
@@ -363,7 +435,7 @@ struct TaskListView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.3 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -375,6 +447,7 @@ struct TaskListView: View {
                 HStack {
                     Text("Task Uncompleted On: " + (lastRoutineDay(task)?.format("MMM d") ?? ""))
                         .fontWeight(.bold)
+                        .multilineTextAlignment(.leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Button {
@@ -382,10 +455,10 @@ struct TaskListView: View {
                 } label: {
                     Image(systemName: "checkmark")
                         .foregroundStyle(isTaskCompleted(task) ? .black : .white)
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .fontWeight(.bold)
                 }
-                .padding(8)
+                .padding(10)
                 .background(.white, in: RoundedRectangle(cornerRadius: 15))
             }
         }
@@ -393,7 +466,7 @@ struct TaskListView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(isTaskCompleted(task) ? 0.3 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -482,24 +555,39 @@ struct TaskListView: View {
         }
         else if option == "Category" {
             return tasks.sorted(by: {
-                (isTaskCompleted($0) ? 1 : 0, $0.category != nil ? 0 : 1, ($0.category?.title ?? ""), CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
+                ($0.category != nil ? 0 : 1, ($0.category?.title ?? ""), isTaskCompleted($0) ? 1 : 0, CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
                 
-                (isTaskCompleted($1) ? 1 : 0, $1.category != nil ? 0 : 1, ($1.category?.title ?? ""), CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
+                ($1.category != nil ? 0 : 1, ($1.category?.title ?? ""), isTaskCompleted($1) ? 1 : 0, CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
             )
         }
         else if option == "Priority" {
             return tasks.sorted(by: {
-                (isTaskCompleted($0) ? 1 : 0, $0.priority == "High" ? 0 : ($0.priority == "Medium") ? 1 : ($0.priority == "Low" ? 2 : 3), CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
+                ($0.priority == "High" ? 0 : ($0.priority == "Medium") ? 1 : ($0.priority == "Low" ? 2 : 3), isTaskCompleted($0) ? 1 : 0, CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
                 
-                (isTaskCompleted($1) ? 1 : 0, $1.priority == "High" ? 0 : ($1.priority == "Medium") ? 1 : ($1.priority == "Low" ? 2 : 3), CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
+                ($1.priority == "High" ? 0 : ($1.priority == "Medium") ? 1 : ($1.priority == "Low" ? 2 : 3), isTaskCompleted($1) ? 1 : 0, CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
             )
         }
         else if option == "Time" {
+            var dateComponents = DateComponents()
+            dateComponents.year = 2023
+            dateComponents.month = 10
+            dateComponents.day = 22
+            dateComponents.hour = 23
+            dateComponents.minute = 27
+
+            let userCalendar = Calendar(identifier: .gregorian)
+            let someDateTime = userCalendar.date(from: dateComponents)!
+            
             return tasks.sorted(by: {
-                (isTaskCompleted($0) ? 1 : 0, $0.isDateEnabled || $0.isRepeatEnabled ? 0 : 1, $0.isDateEnabled ? $0.date : nextRoutineDay($0) ?? lastRoutineDay($0) ?? Date.now, ($0.isDateEnabled && $0.isTimeEnabled) || ($0.isRepeatEnabled && $0.isRoutineTimeEnabled) ? 0 : 1, $0.isTimeEnabled ? $0.time : $0.routineTime, CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
+                ($0.isDateEnabled ? 0 : ($0.isDateEnabled && !isSameDate($0.date, $1.date) ? 1 : $0.isRepeatEnabled ? 2 : 3), isTaskCompleted($0) ? 1 : 0, $0.isDateEnabled && !isSameDate($0.date, $1.date) ? $0.date : someDateTime, ($0.isDateEnabled && $0.isTimeEnabled) ? 0 : 1, ($0.isDateEnabled && $0.isTimeEnabled) ? $0.time : someDateTime, CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
                     
-                (isTaskCompleted($1) ? 1 : 0, $1.isDateEnabled || $1.isRepeatEnabled ? 0 : 1, $1.isDateEnabled ? $1.date : nextRoutineDay($1) ?? lastRoutineDay($1) ?? Date.now, ($1.isDateEnabled && $1.isTimeEnabled) || ($1.isRepeatEnabled && $1.isRoutineTimeEnabled) ? 0 : 1 , $1.isTimeEnabled ? $1.time : $1.routineTime, CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
+                ($1.isDateEnabled ? 0 : ($1.isDateEnabled && !isSameDate($0.date, $1.date) ? 1 : $1.isRepeatEnabled ? 2 : 3), isTaskCompleted($1) ? 1 : 0, $1.isDateEnabled && !isSameDate($0.date, $1.date) ? $1.date : someDateTime, ($1.isDateEnabled && $1.isTimeEnabled) ? 0 : 1, ($1.isDateEnabled && $1.isTimeEnabled) ? $1.time : someDateTime, CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
             )
+//            return tasks.sorted(by: {
+//                (isTaskCompleted($0) ? 1 : 0, $0.isDateEnabled || $0.isRepeatEnabled ? 0 : 1, $0.isDateEnabled ? $0.date : nextRoutineDay($0) ?? lastRoutineDay($0) ?? Date.now, ($0.isDateEnabled && $0.isTimeEnabled) || ($0.isRepeatEnabled && $0.isRoutineTimeEnabled) ? 0 : 1, $0.isTimeEnabled ? $0.time : $0.routineTime, CLLocation(latitude: $0.latitude, longitude: $0.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0))) <
+//                    
+//                (isTaskCompleted($1) ? 1 : 0, $1.isDateEnabled || $1.isRepeatEnabled ? 0 : 1, $1.isDateEnabled ? $1.date : nextRoutineDay($1) ?? lastRoutineDay($1) ?? Date.now, ($1.isDateEnabled && $1.isTimeEnabled) || ($1.isRepeatEnabled && $1.isRoutineTimeEnabled) ? 0 : 1 , $1.isTimeEnabled ? $1.time : $1.routineTime, CLLocation(latitude: $1.latitude, longitude: $1.longitude).distance(from: CLLocation(latitude: locationManager.userLocation?.latitude ?? 0, longitude: locationManager.userLocation?.longitude ?? 0)))}
+//            )
         }
         else{
             return tasks.sorted(by: {

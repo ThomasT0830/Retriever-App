@@ -289,6 +289,14 @@ struct UpdateTaskView: View {
                                 isEndDateEnabled = false
                             }
                             
+                            if !isDateEnabled {
+                                isTimeEnabled = false
+                            }
+                            
+                            if !isRepeatEnabled {
+                                isRoutineTimeEnabled = false
+                            }
+                            
                             task.title = title
                             task.notes = notes
                             task.priority = priority

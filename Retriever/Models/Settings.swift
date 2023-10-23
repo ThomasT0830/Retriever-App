@@ -29,13 +29,16 @@ class AppSettings {
     var notificationTime: Date
     var notificationDistance: Double
     
+    var sortCalendar: String
+    var sortList: String
+    
     init() {
         uncategorizedColorString = Color.gray.description
         isExpandCellOnDefault = true
         
         isDeleteOnCompletion = false
         isHideOnCompletionCalendar = false
-        isHideOnCompletionList = true
+        isHideOnCompletionList = false
         
         isEnableTimeNotification = "Enable"
         isEnableLocationNotification = "Enable"
@@ -46,6 +49,9 @@ class AppSettings {
         defaultPriority = "None"
         
         notificationTime = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: Date())!
-        notificationDistance = 2000
+        notificationDistance = 500
+        
+        sortCalendar = "Distance"
+        sortList = "Distance"
     }
 }

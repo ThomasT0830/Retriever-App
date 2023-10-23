@@ -211,13 +211,13 @@ struct HomeView: View {
                     Circle()
                         .fill(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient)
                         .frame(width: 12, height: 12)
-                        .opacity(!isSelectedTask(task) ? 0.5 : 1)
+                        .opacity(!isSelectedTask(task) ? 0.6 : 1)
                 }
                 else {
                     Circle()
                         .stroke(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient, lineWidth: 3)
                         .frame(width: 12, height: 12)
-                        .opacity(!isSelectedTask(task) ? 0.5 : 1)
+                        .opacity(!isSelectedTask(task) ? 0.6 : 1)
                 }
             }
             Button {
@@ -233,7 +233,7 @@ struct HomeView: View {
                 RoundedRectangle(cornerRadius: 50)
                     .fill(convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).gradient)
                     .frame(width: 4)
-                    .opacity(!isSelectedTask(task) ? 0.5 : 1)
+                    .opacity(!isSelectedTask(task) ? 0.6 : 1)
             }
         }
     }
@@ -335,7 +335,7 @@ struct HomeView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.6 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -385,10 +385,10 @@ struct HomeView: View {
                     } label: {
                         Image(systemName: "checkmark")
                             .foregroundStyle(isTaskCompleted(task) ? .black : .white)
-                            .font(.system(size: 10))
+                            .font(.system(size: 12))
                             .fontWeight(.bold)
                     }
-                    .padding(8)
+                    .padding(10)
                     .background(.white, in: RoundedRectangle(cornerRadius: 15))
                 }
             }
@@ -397,7 +397,7 @@ struct HomeView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.6 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -409,6 +409,7 @@ struct HomeView: View {
                 HStack {
                     Text("Task Uncompleted On: " + (lastRoutineDay(task)?.format("MMM d") ?? ""))
                         .fontWeight(.bold)
+                        .multilineTextAlignment(.leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Button {
@@ -416,10 +417,10 @@ struct HomeView: View {
                 } label: {
                     Image(systemName: "checkmark")
                         .foregroundStyle(isTaskCompleted(task) ? .black : .white)
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .fontWeight(.bold)
                 }
-                .padding(8)
+                .padding(10)
                 .background(.white, in: RoundedRectangle(cornerRadius: 15))
             }
         }
@@ -427,7 +428,7 @@ struct HomeView: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.6 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -449,7 +450,7 @@ struct HomeView: View {
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.5 : 1).gradient
+            convertColorString(task.category?.colorString ?? settings.uncategorizedColorString).opacity(!isSelectedTask(task) ? 0.6 : 1).gradient
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }

@@ -287,6 +287,14 @@ struct CreateTaskView: View {
                                 isEndDateEnabled = false
                             }
                             
+                            if !isDateEnabled {
+                                isTimeEnabled = false
+                            }
+                            
+                            if !isRepeatEnabled {
+                                isRoutineTimeEnabled = false
+                            }
+                            
                             let task = TaskItem(title: title, notes: notes, priority: priority, date: date, time: time, routine: routine.sorted(by: { $0 < $1 }), endDate: endDate, routineTime: routineTime, latitude: latitude, longitude: longitude, locationTitle: locationTitle, locationSubtitle: locationSubtitle, isDateEnabled: isDateEnabled, isTimeEnabled: isTimeEnabled, isRepeatEnabled: isRepeatEnabled, isEndDateEnabled: isEndDateEnabled, isRoutineTimeEnabled: isRoutineTimeEnabled, isTimeNotificationEnabled: isTimeNotificationEnabled, isLocationNotificationEnabled: isLocationNotificationEnabled)
                             context.insert(task)
                             task.category = category

@@ -33,6 +33,7 @@
 		0042DBD42AD25AC200DFBDBA /* CreateCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0042DBD32AD25AC200DFBDBA /* CreateCategoriesView.swift */; };
 		0073BACB2AE081D300C2B124 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073BACA2AE081D300C2B124 /* DetailView.swift */; };
 		008153722ADFA21100853E98 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008153712ADFA21100853E98 /* Settings.swift */; };
+		009829122AE43C92002C9AAF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 009829112AE43C92002C9AAF /* Launch Screen.storyboard */; };
 		00ABEE2B2AE2A9DA0099A1A6 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABEE2A2AE2A9DA0099A1A6 /* TestView.swift */; };
 		00ABEE2D2AE303C70099A1A6 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABEE2C2AE303C70099A1A6 /* MapViewModel.swift */; };
 		00ABEE2F2AE514490099A1A6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00ABEE2E2AE514490099A1A6 /* NotificationManager.swift */; };
@@ -92,6 +93,7 @@
 		0042DBD32AD25AC200DFBDBA /* CreateCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoriesView.swift; sourceTree = "<group>"; };
 		0073BACA2AE081D300C2B124 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		008153712ADFA21100853E98 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		009829112AE43C92002C9AAF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		00ABEE2A2AE2A9DA0099A1A6 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		00ABEE2C2AE303C70099A1A6 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		00ABEE2E2AE514490099A1A6 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			children = (
 				0042DBAD2AB5588C00DFBDBA /* ViewModel */,
 				0042DBAE2AB5589400DFBDBA /* Views */,
+				009829132AE43DE9002C9AAF /* Launch Screen */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -268,6 +271,14 @@
 				00ABEE2A2AE2A9DA0099A1A6 /* TestView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		009829132AE43DE9002C9AAF /* Launch Screen */ = {
+			isa = PBXGroup;
+			children = (
+				009829112AE43C92002C9AAF /* Launch Screen.storyboard */,
+			);
+			path = "Launch Screen";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +385,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				009829122AE43C92002C9AAF /* Launch Screen.storyboard in Resources */,
 				0042DB812AB5570900DFBDBA /* Preview Assets.xcassets in Resources */,
 				0042DB7E2AB5570900DFBDBA /* Assets.xcassets in Resources */,
 			);
@@ -591,6 +603,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Retriever/Preview Content\"";
@@ -603,8 +616,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -628,6 +642,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Retriever/Preview Content\"";
@@ -640,8 +655,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
